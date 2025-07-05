@@ -1,2 +1,2 @@
-# XceliBot - Automate. Analyze. Export. Effortlessly
-XceliBot is an intelligent automation tool designed to simplify Excel data handling. Users can upload spreadsheets, define smart filtering or conditional rules, and let XceliBot automatically analyze and export the refined data—all without manual effort. Built for speed, precision, and ease of use, XceliBot empowers users to work smarter with their spreadsheets, whether for reporting, auditing, or data segmentation.
+# Xtracta - Automate. Analyze. Export. Effortlessly
+Xtracta is an intelligent automation tool designed to simplify Excel data handling. Users can upload spreadsheets, define smart filtering or conditional rules, and let Xtracta automatically analyze and export the refined data—all without manual effort. Built for speed, precision, and ease of use, Xtracta empowers users to work smarter with their spreadsheets, whether for reporting, auditing, or data segmentation.
