@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, RefreshCw, ArrowRight } from 'lucide-react';
+import { Eye, RefreshCw, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from './ui/Card.js';
 import { Button } from './ui/Button.js';
 import { Badge } from './ui/Badge.js';
@@ -7,7 +7,7 @@ import { Select, SelectOption } from './ui/Select.js';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/Table.js';
 import { formatValue } from '../lib/file-utils.js';
 
-const DataPreview = ({ processedData, fileData, onRefresh, onProceed }) => {
+const DataPreview = ({ processedData, fileData, onRefresh, onProceed, onGoBack }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   
@@ -45,15 +45,27 @@ const DataPreview = ({ processedData, fileData, onRefresh, onProceed }) => {
   };
   
   return (
+    <>
+    <div className="flex justify-between mb-8">
+              <Button onClick={onGoBack} variant="outline">
+                <ArrowLeft className="mr-2" size={16} />
+                Back to Filter Data
+              </Button>
+          <Button onClick={onProceed} disabled={processedData.rows.length === 0} className="text-white bg-orange-600 hover:bg-orange-700">
+            Proceed to Export
+            <ArrowRight className="ml-2" size={16} />
+          </Button>
+        </div>
+
     <Card className="mb-8">
       <CardContent>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-            <Eye className="inline-block mr-2 text-blue-600" size={20} />
+            <Eye className="inline-block mr-2 text-orange-600" size={20} />
             Data Preview
           </h2>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
+            <span className="text-md text-gray-600">
               <span className="font-medium">{processedData.filteredCount.toLocaleString()}</span> of{' '}
               <span className="font-medium">{processedData.totalCount.toLocaleString()}</span> records
             </span>
@@ -61,6 +73,7 @@ const DataPreview = ({ processedData, fileData, onRefresh, onProceed }) => {
               <RefreshCw className="mr-2" size={16} />
               Refresh
             </Button>
+            
           </div>
         </div>
 
@@ -69,7 +82,7 @@ const DataPreview = ({ processedData, fileData, onRefresh, onProceed }) => {
             <TableHeader>
               <TableRow>
                 {processedData.headers.map((header, index) => (
-                  <TableHead key={index} className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <TableHead key={index} className="text-sm font-medium text-gray-500 uppercase tracking-wider">
                     {header}
                   </TableHead>
                 ))}
@@ -83,7 +96,7 @@ const DataPreview = ({ processedData, fileData, onRefresh, onProceed }) => {
                     const columnType = getColumnType(header);
                     
                     return (
-                      <TableCell key={cellIndex} className="text-sm">
+                      <TableCell key={cellIndex} className="text-md">
                         {columnType === 'boolean' ? (
                           renderBooleanBadge(cell)
                         ) : (
@@ -108,14 +121,14 @@ const DataPreview = ({ processedData, fileData, onRefresh, onProceed }) => {
 
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600">Show</span>
+            <span className="text-md text-gray-600">Show</span>
             <Select value={String(pageSize)} onValueChange={handlePageSizeChange} className="w-20">
               <SelectOption value="10">10</SelectOption>
               <SelectOption value="25">25</SelectOption>
               <SelectOption value="50">50</SelectOption>
               <SelectOption value="100">100</SelectOption>
             </Select>
-            <span className="text-sm text-gray-600">entries</span>
+            <span className="text-md text-gray-600">entries</span>
           </div>
           
           {totalPages > 1 && (
@@ -155,14 +168,15 @@ const DataPreview = ({ processedData, fileData, onRefresh, onProceed }) => {
           )}
         </div>
         
-        <div className="flex justify-end mt-6">
-          <Button onClick={onProceed} disabled={processedData.rows.length === 0} className="bg-blue-600 hover:bg-blue-700">
-            <ArrowRight className="mr-2" size={16} />
-            Proceed to Export
-          </Button>
-        </div>
+        
       </CardContent>
     </Card>
+
+    
+
+        </>
+
+    
   );
 };
 

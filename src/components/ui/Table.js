@@ -3,7 +3,7 @@ import React from 'react';
 export const Table = ({ children, className = '', ...props }) => {
   return (
     <div className="relative w-full overflow-auto">
-      <table className={`w-full caption-bottom text-sm ${className}`} {...props}>
+      <table className={`w-full caption-bottom text-md ${className}`} {...props}>
         {children}
       </table>
     </div>

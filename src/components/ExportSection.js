@@ -38,45 +38,69 @@ const ExportSection = ({
   };
   
   return (
+    <>
+     <div className="flex justify-between mb-8">
+          <Button onClick={onGoBack} variant="outline">
+            <ArrowLeft className="mr-2" size={16} />
+            Back to Preview
+          </Button>
+          <Button
+            onClick={handleExport}
+            disabled={isExporting || !exportOptions.fileName.trim()}
+            className="text-white bg-orange-600 hover:bg-orange-700"
+          >
+            {isExporting ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Exporting...
+              </>
+            ) : (
+              <>
+                <Download className="mr-2" size={16} />
+                Download {exportOptions.format.toUpperCase()}
+              </>
+            )}
+          </Button>
+        </div>
     <Card>
       <CardContent>
         <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <Download className="inline-block mr-2 text-blue-600" size={20} />
+          <Download className="inline-block mr-2 text-orange-600" size={20} />
           Export Filtered Data
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h3 className="text-md font-semibold text-gray-900 mb-3">Export Summary</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Total Records:</span>
-                <span className="text-sm font-medium text-gray-900">
-                  {processedData.filteredCount.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Selected Fields:</span>
-                <span className="text-sm font-medium text-gray-900">{selectedFieldsCount}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Active Filters:</span>
-                <span className="text-sm font-medium text-gray-900">{activeFiltersCount}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">File Format:</span>
-                <span className="text-sm font-medium text-gray-900">
-                  {exportOptions.format.toUpperCase()}
-                </span>
-              </div>
-            </div>
-          </div>
+  <h3 className="text-md font-semibold text-gray-900 mb-3">Export Summary</h3>
+  <div className="grid grid-cols-2 gap-4">
+    <div className="p-4 bg-gray-50 rounded-md shadow-sm">
+      <p className="text-sm text-gray-500">Total Records</p>
+      <p className="text-xl font-semibold text-gray-900">
+        {processedData.filteredCount.toLocaleString()}
+      </p>
+    </div>
+    <div className="p-4 bg-gray-50 rounded-md shadow-sm">
+      <p className="text-sm text-gray-500">Selected Fields</p>
+      <p className="text-xl font-semibold text-gray-900">{selectedFieldsCount}</p>
+    </div>
+    <div className="p-4 bg-gray-50 rounded-md shadow-sm">
+      <p className="text-sm text-gray-500">Active Filters</p>
+      <p className="text-xl font-semibold text-gray-900">{activeFiltersCount}</p>
+    </div>
+    <div className="p-4 bg-gray-50 rounded-md shadow-sm">
+      <p className="text-sm text-gray-500">File Format</p>
+      <p className="text-xl font-semibold text-gray-900">
+        {exportOptions.format.toUpperCase()}
+      </p>
+    </div>
+  </div>
+</div>
           
           <div>
             <h3 className="text-md font-semibold text-gray-900 mb-3">Export Options</h3>
             <div className="space-y-3">
               <div>
-                <label htmlFor="fileName" className="text-sm font-medium text-gray-700 block mb-1">
+                <label htmlFor="fileName" className="text-md font-medium text-gray-700 block mb-1">
                   File Name
                 </label>
                 <Input
@@ -88,7 +112,7 @@ const ExportSection = ({
                 />
               </div>
               <div>
-                <label htmlFor="format" className="text-sm font-medium text-gray-700 block mb-1">
+                <label htmlFor="format" className="text-md font-medium text-gray-700 block mb-1">
                   Format
                 </label>
                 <Select
@@ -108,7 +132,7 @@ const ExportSection = ({
                     setExportOptions(prev => ({ ...prev, includeHeaders: Boolean(checked) }))
                   }
                 />
-                <label htmlFor="includeHeaders" className="text-sm text-gray-600">
+                <label htmlFor="includeHeaders" className="text-md text-gray-600">
                   Include column headers
                 </label>
               </div>
@@ -120,36 +144,16 @@ const ExportSection = ({
           <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
             <div className="flex items-center">
               <CheckCircle className="text-green-500 mr-2" size={16} />
-              <span className="text-sm text-green-700">File exported successfully!</span>
+              <span className="text-md text-green-700">File exported successfully!</span>
             </div>
           </div>
         )}
         
-        <div className="mt-6 flex justify-between">
-          <Button onClick={onGoBack} variant="outline">
-            <ArrowLeft className="mr-2" size={16} />
-            Back to Preview
-          </Button>
-          <Button
-            onClick={handleExport}
-            disabled={isExporting || !exportOptions.fileName.trim()}
-            className="bg-green-600 hover:bg-green-700"
-          >
-            {isExporting ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Exporting...
-              </>
-            ) : (
-              <>
-                <Download className="mr-2" size={16} />
-                Download {exportOptions.format.toUpperCase()}
-              </>
-            )}
-          </Button>
-        </div>
+        
       </CardContent>
     </Card>
+   
+        </>
   );
 };
 

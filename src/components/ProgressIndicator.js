@@ -24,18 +24,18 @@ const ProgressIndicator = ({ currentStep }) => {
               <div key={step.id} className="flex items-center">
                 <div className="flex items-center">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-md font-medium ${
                       index <= currentStepIndex
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-orange-600 text-white'
                         : 'bg-gray-300 text-gray-600'
                     }`}
                   >
                     {step.number}
                   </div>
                   <span
-                    className={`ml-2 text-sm font-medium ${
+                    className={`ml-2 text-md font-medium ${
                       index <= currentStepIndex
-                        ? 'text-blue-600'
+                        ? 'text-orange-600'
                         : 'text-gray-500'
                     }`}
                   >

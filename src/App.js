@@ -9,6 +9,7 @@ import DataPreview from './components/DataPreview.js';
 import ExportSection from './components/ExportSection.js';
 import { ExcelProcessor } from './lib/excel-processor.js';
 import { WORKFLOW_STEPS } from './types/index.js';
+import pbExtractaLogo from './assets/pbExtracta-logo.png';
 
 // Simple toast notification system
 const Toast = ({ message, type, onClose }) => {
@@ -48,18 +49,20 @@ function App() {
   const [processedData, setProcessedData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   
   const { toast, showToast, hideToast } = useToast();
   
   const handleFileSelect = useCallback(async (file) => {
     setIsLoading(true);
     setError(null);
+    setSelectedFile(file);
     
     try {
       const data = await ExcelProcessor.processFile(file);
       setFileData(data);
       setSelectedFields(data.columns.map(col => col.name)); // Select all fields by default
-      setCurrentStep(WORKFLOW_STEPS.ANALYSIS);
+      // setCurrentStep(WORKFLOW_STEPS.ANALYSIS);
       
       showToast(`Loaded ${data.totalRows.toLocaleString()} rows with ${data.totalColumns} columns.`);
     } catch (err) {
@@ -70,6 +73,10 @@ function App() {
       setIsLoading(false);
     }
   }, [showToast]);
+
+  const handleProceedToAnalysis = useCallback(() => {
+    setCurrentStep(WORKFLOW_STEPS.ANALYSIS);
+  }, []);
   
   const handleProceedToSelection = useCallback(() => {
     setCurrentStep(WORKFLOW_STEPS.SELECTION);
@@ -96,6 +103,15 @@ function App() {
     setCurrentStep(WORKFLOW_STEPS.EXPORT);
   }, []);
   
+  const handleGoBackToFileUpload = useCallback(() => {
+    setCurrentStep(WORKFLOW_STEPS.UPLOAD);
+  }, []);
+  const handleGoBackToFieldSelection = useCallback(() => {
+    setCurrentStep(WORKFLOW_STEPS.ANALYSIS);
+  }, []);
+  const handleGoBackToFilterData = useCallback(() => {
+    setCurrentStep(WORKFLOW_STEPS.SELECTION);
+  }, []);
   const handleGoBackToPreview = useCallback(() => {
     setCurrentStep(WORKFLOW_STEPS.PREVIEW);
   }, []);
@@ -139,22 +155,31 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <FileSpreadsheet className="text-blue-600 text-2xl mr-3" size={32} />
-              <h1 className="text-xl font-semibold text-gray-900">Excel Data Filter & Export</h1>
+              {/* <FileSpreadsheet className="text-blue-600 text-2xl mr-3" size={32} /> */}
+              {/* <h1 className="text-xl font-semibold text-gray-900">Excel Data Filter & Export</h1> */}
+              <img src={pbExtractaLogo} alt="pbExtracta"/>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500">
+              {/* <span className="text-md text-gray-500">
                 {fileData ? `${fileData.fileName} loaded` : 'No file uploaded'}
-              </span>
-              <Button variant="outline" size="sm">
+              </span> */}
+              
+              {/* <Button variant="outline" size="sm">
                 <HelpCircle className="mr-2" size={16} />
                 Help
-              </Button>
+              </Button> */}
+
               {fileData && (
-                <Button onClick={handleStartOver} variant="outline" size="sm">
+                <Button onClick={handleStartOver} 
+                // variant="outline" size="sm"
+                className="text-white bg-orange-600 hover:bg-orange-700">
                   Start Over
                 </Button>
               )}
+              
+              <span className="text-md font-bold text-red-500">
+                Automate. Analyze. Export. Effortlessly.
+              </span>
             </div>
           </div>
         </div>
@@ -170,6 +195,8 @@ function App() {
             onFileSelect={handleFileSelect}
             isLoading={isLoading}
             error={error}
+            onProceed={handleProceedToAnalysis}
+            file={selectedFile}
           />
         )}
         
@@ -177,6 +204,9 @@ function App() {
           <DataAnalysis
             fileData={fileData}
             onProceed={handleProceedToSelection}
+            selectedFields={selectedFields}
+  onSelectedFieldsChange={setSelectedFields}
+  onGoBack={handleGoBackToFileUpload}
           />
         )}
         
@@ -188,6 +218,7 @@ function App() {
             filterConditions={filterConditions}
             onFilterConditionsChange={setFilterConditions}
             onProceed={handleProceedToPreview}
+            onGoBack={handleGoBackToFieldSelection}
           />
         )}
         
@@ -197,6 +228,7 @@ function App() {
             fileData={fileData}
             onRefresh={handleRefreshPreview}
             onProceed={handleProceedToExport}
+            onGoBack={handleGoBackToFilterData}
           />
         )}
         
@@ -209,6 +241,7 @@ function App() {
             onGoBack={handleGoBackToPreview}
           />
         )}
+        
       </main>
     </div>
   );
